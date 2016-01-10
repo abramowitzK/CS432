@@ -4,7 +4,7 @@ OPTIONS=$(GCC_OPTIONS) $(GL_OPTIONS)
 
 
 build: 
-	g++ *.cpp Common/InitShader.o $(OPTIONS) -o red_shapes  
+	g++ *.cpp *.h Common/InitShader.o $(OPTIONS) -o red_shapes
 run: build
 	@./red_shapes
 clean:
