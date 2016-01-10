@@ -3,6 +3,10 @@ GL_OPTIONS=-lGLEW -lGL -lglut
 OPTIONS=$(GCC_OPTIONS) $(GL_OPTIONS)
 
 
-.cpp: 
-	g++ $@.cpp Common/InitShader.o $(OPTIONS) -o $@  
+build: 
+	g++ *.cpp Common/InitShader.o $(OPTIONS) -o red_shapes  
+run: build
+	@./red_shapes
+clean:
+	@rm red_shapes
 
