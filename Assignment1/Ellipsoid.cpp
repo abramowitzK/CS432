@@ -28,15 +28,19 @@ void Ellipsoid::Draw(GLuint program) {
 }
 
 void Ellipsoid::Init() {
-    m_vertices.push_back(Vertex2D(m_center, m_color));
-    for(int i = 0; i < 100; i++) {
+	const int numIter = 360;
+	vec4 base = m_color;
+	vec4 tempColor;
+    for(int i = 0; i < numIter; i++) {
         if(m_varyColor){
-            m_color.x = m_color.x *(2.0 * M_PI * i / 100.0)/(2.0*M_PI);
+            tempColor = base *(2.0 * M_PI * i / (double)numIter)/(2.0*M_PI);
         }
-        m_vertices.push_back(Vertex2D(vec2((float)(m_center.x + m_radius * cos(2 * M_PI * i / 100)),
-                                           (float)(m_center.y + m_radius * sin(2 * M_PI * i / 100) * m_verticalScale)), m_color ));
+		else
+			tempColor = base;
+        m_vertices.push_back(Vertex2D(vec2((float)(m_center.x + m_radius * cos(2 * M_PI * i / numIter)),
+                                           (float)(m_center.y + m_radius * sin(2 * M_PI * i / numIter) * m_verticalScale)), tempColor ));
     }
-    m_vertices.push_back(m_vertices[1]);
+ //   m_vertices.push_back(Vertex2D(m_vertices[numIter-1].Position, m_vertices[numIter-1].Color));
     glGenBuffers( 1, &m_vbo);
     glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
     glBufferData( GL_ARRAY_BUFFER, ((unsigned int)m_vertices.size())*sizeof(Vertex2D), &m_vertices[0], GL_STATIC_DRAW );
