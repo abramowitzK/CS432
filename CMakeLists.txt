@@ -9,7 +9,11 @@ set(SOURCE_FILES
         "Assignment1/include/CheckError.h"
         "Assignment1/include/mat.h"
         "Assignment1/include/vec.h"
-        "Assignment1/red_shapes.cpp" "Assignment1/Shape.cpp" "Assignment1/Shape.h")
+        "Assignment1/red_shapes.cpp"
+        "Assignment1/RegularPolygon.cpp"
+        "Assignment1/RegularPolygon.h"
+        "Assignment1/Vertex.h"
+        "Assignment1/Shape.h" Assignment1/Ellipsoid.cpp Assignment1/Ellipsoid.h Assignment1/Triangle.cpp Assignment1/Triangle.h)
 include_directories(Assignment1/include)
 
 add_executable(Assignment1 ${SOURCE_FILES})
