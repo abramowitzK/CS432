@@ -2,8 +2,8 @@
 // Created by kyle on 1/10/16.
 //
 
-#ifndef ASSIGNMENT1_TRIANGLE_H
-#define ASSIGNMENT1_TRIANGLE_H
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
 
 
 #include "Angel.h"
@@ -26,4 +26,4 @@ private:
 };
 
 
-#endif //ASSIGNMENT1_TRIANGLE_H
+#endif

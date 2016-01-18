@@ -2,8 +2,8 @@
 // Created by kyle on 1/10/16.
 //
 
-#ifndef ASSIGNMENT1_ELLIPSOID_H
-#define ASSIGNMENT1_ELLIPSOID_H
+#ifndef ELLIPSOID_H
+#define ELLIPSOID_H
 
 #include "Angel.h"
 #include "Shape.h"
@@ -28,4 +28,4 @@ private:
 };
 
 
-#endif //ASSIGNMENT1_ELLIPSOID_H
+#endif

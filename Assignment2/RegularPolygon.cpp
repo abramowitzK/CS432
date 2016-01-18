@@ -13,7 +13,7 @@ RegularPolygon::RegularPolygon(unsigned int numSides, vec4 color, vec2 center, f
 
 void RegularPolygon::Init() {
     m_vertices.push_back(Vertex2D(m_center, m_color));
-    for(int i = 0; i < m_numSides; i++) {
+    for(unsigned int i = 0; i < m_numSides; i++) {
         m_vertices.push_back(Vertex2D(vec2((float)(m_center.x + m_radius * cos(2 * M_PI * i / m_numSides+ M_PI/4)),
                                   (float)(m_center.y + m_radius * sin(2 * M_PI * i / m_numSides + M_PI/4))), m_color));
     }

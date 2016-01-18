@@ -1,4 +1,5 @@
-#pragma once
+#ifndef VERTEX_H
+#define VERTEX_H
 #include "Angel.h"
 struct Vertex2D
 {
@@ -7,3 +8,4 @@ struct Vertex2D
     vec4 Color;
 
 };
+#endif

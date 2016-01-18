@@ -13,6 +13,11 @@ GLuint program;
 void
 init( void )
 {
+    // Create a vertex array object
+    GLuint vao[1];
+    glGenVertexArrays( 1, vao );
+    glBindVertexArray( vao[0] );
+
     shapes.push_back(new RegularPolygon(4, vec4(1.0f), vec2(0.0f, -0.25f), 0.6f));
     shapes.push_back(new RegularPolygon(4, vec4(0.0f), vec2(0.0f, -0.25f), 0.5f));
     shapes.push_back(new RegularPolygon(4, vec4(1.0f), vec2(0.0f, -0.25f), 0.4f));
@@ -66,7 +71,7 @@ main( int argc, char **argv )
     glutInitDisplayMode( GLUT_RGBA );
     glutInitWindowSize( 500, 500 );
 
-    glutCreateWindow( "Red Triangle" );
+    glutCreateWindow( "Shapes" );
     glewExperimental=GL_TRUE;
     glewInit();
     init();

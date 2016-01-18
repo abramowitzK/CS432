@@ -2,8 +2,8 @@
 // Created by kyle on 1/10/16.
 //
 
-#ifndef ASSIGNMENT1_SHAPE_H
-#define ASSIGNMENT1_SHAPE_H
+#ifndef REGULAR_POLYGON_H
+#define REGULAR_POLYGON_H
 #include "Angel.h"
 #include "Vertex.h"
 #include "Shape.h"
@@ -25,4 +25,4 @@ protected:
 };
 
 
-#endif //ASSIGNMENT1_SHAPE_H
+#endif
