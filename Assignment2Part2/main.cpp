@@ -5,6 +5,7 @@
 #include "RegularPolygon.h"
 #include "Ellipsoid.h"
 #include "Triangle.h"
+#include <iostream>
 const int NumPoints = 3 + 6 + 15;
 
 //--------------------------------------------------------------------------
@@ -13,6 +14,7 @@ GLuint program;
 void
 init( void )
 {
+    std::cout << "This program has no interaction" << std::endl;
     // Create a vertex array object
     GLuint vao[1];
     glGenVertexArrays( 1, vao );

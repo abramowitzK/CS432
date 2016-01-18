@@ -1,5 +1,4 @@
-Used the base code provided in the assignment. Outputs a regular pentagon in quadrant II (created using the parametric equation for a regular polygon), 
-a square in quadrant I and a triangle in quadrant III.
+Used the base code provided in the assignment. Outputs two shaded ellipses and a purple decagon.
 
 Written in C++
 
