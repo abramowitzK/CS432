@@ -18,15 +18,9 @@ init( void )
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
 
-    shapes.push_back(new RegularPolygon(4, vec4(1.0f), vec2(0.0f, -0.25f), 0.6f));
-    shapes.push_back(new RegularPolygon(4, vec4(0.0f), vec2(0.0f, -0.25f), 0.5f));
-    shapes.push_back(new RegularPolygon(4, vec4(1.0f), vec2(0.0f, -0.25f), 0.4f));
-    shapes.push_back(new RegularPolygon(4, vec4(0.0f), vec2(0.0f, -0.25f), 0.3f));
-    shapes.push_back(new RegularPolygon(4, vec4(1.0f), vec2(0.0f, -0.25f), 0.2f));
-    shapes.push_back(new RegularPolygon(4, vec4(0.0f), vec2(0.0f, -0.25f), 0.1f));
-    shapes.push_back(new Ellipsoid(vec4(1.0f, 0.0f, 0.0f, 1.0f), vec2(0.75f, 0.75f), 0.25f, true, 1.0));
-    shapes.push_back(new Ellipsoid(vec4(1.0f, 0.0f, 0.0f, 1.0f), vec2(-0.75f, 0.75f), 0.25f, false, 0.6));
-    shapes.push_back(new Triangle( vec4(0.0f, 0.0f, 1.0f, 1.0f),vec4(1.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 1.0f, 0.0f, 1.0f),  0.25f, vec2(0.0f, 0.75f)));
+    shapes.push_back(new Ellipsoid(vec4(0.7f, 0.0f, 0.7f, 1.0f), vec2(0.0f, 0.0f), 0.5f, true, 0.4));
+    shapes.push_back(new RegularPolygon(10, vec4(0.5f, 0.0f, 0.5f, 1.0f),vec2(-0.75f, -0.75f), 0.25f));
+    shapes.push_back(new Ellipsoid(vec4(0.1f, 0.7f, 0.1f, 1.0f), vec2(0.75f, -0.5f), 0.5f, true, 1.4));
     for(Shape * s : shapes)
     {
         s->Init();
