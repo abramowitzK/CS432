@@ -4,8 +4,8 @@ OPTIONS=$(GCC_OPTIONS) $(GL_OPTIONS)
 
 
 build: 
-	@g++ main.cpp Common/InitShader.o $(OPTIONS) -o part1
-	@g++ mainPart2.cpp Common/InitShader.o $(OPTIONS) -o part2 
+	@g++ main.cpp *.cpp Common/InitShader.o $(OPTIONS) -o part1
+	@g++ mainPart2.cpp *.cpp Common/InitShader.o $(OPTIONS) -o part2 
 run1: build
 	@./part1
 run2: build
