@@ -53,6 +53,8 @@ keyboard( unsigned char key, int x, int y )
 {
     switch ( key ) {
     case 033:
+		for (auto shape : shapes)
+			delete shape;
         exit( EXIT_SUCCESS );
         break;
     }
