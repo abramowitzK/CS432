@@ -4,9 +4,12 @@ OPTIONS=$(GCC_OPTIONS) $(GL_OPTIONS)
 
 
 build: 
-	@g++ *.cpp *.h Common/InitShader.o $(OPTIONS) -o shapes 
-run: build
-	@./shapes
+	@g++ main.cpp Common/InitShader.o $(OPTIONS) -o part1
+	@g++ mainPart2.cpp Common/InitShader.o $(OPTIONS) -o part2 
+run1: build
+	@./part1
+run2: build
+	@./part2
 clean:
 	@rm shapes
 
