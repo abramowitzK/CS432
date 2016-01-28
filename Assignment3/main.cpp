@@ -4,6 +4,7 @@
 #include "Angel.h"
 #include "RegularPolygon.h"
 #include "Ellipsoid.h"
+#include <random>
 #include <iostream>
 //A global update ticks counter
 int globalTime = 0;
@@ -44,10 +45,11 @@ std::vector<Shape*> window2Shapes;
 std::vector<Shape*> subWindowShapes;
 GLuint program[3];
 void init( void ) {
+    srand(time(0));
     std::cout << "The subwindow has a right click menu to change its clear color" << std::endl;
     std::cout << "The main window has a menu to start and stop animation and change the color of the white squares" << std::endl;
     std::cout << "The secondary takes keyboard input (r,b,g,y,o,p,w) to change color of objects (only when that window is focused)" << std::endl;
-    std::cout << "Shift clicking will allow you to create a breathing circle in the main window" << std::endl;
+    std::cout << "Clicking will allow you to create a breathing circle in the main window" << std::endl;
     // Create vertex array objects
     glGenVertexArrays( 3, vao );
 
@@ -239,11 +241,14 @@ void subMainMenu(int option) {
             squareColor = vec4(0.0,1.0,0.0,1.0);
             break;
     }
-    for(unsigned int i = 0; i < shapes.size(); i++) {
+    for(unsigned int i = 0; i < 6; i++) {
+        glutSetWindow(window1);
         if(i%2 == 0) {
             //only want to set squares who are colored white
             shapes[i]->SetColor(squareColor);
+            shapes[i]->Update(globalTime);
         }
+        glutPostWindowRedisplay(window1);
     }
 }
 //Main window mouse function for creating circles
@@ -251,12 +256,12 @@ void mainWindowMouse(int button, int state, int x, int y) {
     y = height - y;
     float transformedX = (float)((x - width)*(2.0)/((float)width) + 1.0);
     float transformedY = (float)((y - height)*(2.0)/((float)height) + 1.0);
-    if(button == GLUT_LEFT_BUTTON && glutGetModifiers() && GLUT_ACTIVE_SHIFT)
+    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
     {
         //On mouse up, create a circle
         glutSetWindow(window1);
         glBindVertexArray(vao[0]);
-        shapes.push_back(new Ellipsoid(vec4(1.0), vec2(transformedX,transformedY), 0.2, true, 1.0, true));
+        shapes.push_back(new Ellipsoid(vec4((float)rand()/(float)RAND_MAX,(float)rand()/(float)RAND_MAX,(float)rand()/(float)RAND_MAX, 1.0f), vec2(transformedX,transformedY), 0.2, true, 1.0, true));
         shapes[shapes.size()-1]->Init(0);
         for (auto shape : shapes) {
             shape->Update(globalTime);
