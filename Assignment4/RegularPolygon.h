@@ -13,8 +13,17 @@ class RegularPolygon : public Shape{
 public:
 
     RegularPolygon(unsigned int numSides, vec4 color, vec2 center, float radius);
-    virtual void Init() override ;
+    virtual void Init(float angle) override ;
+    virtual void Update(float time) override ;
     virtual void Draw(GLuint program) override ;
+    inline virtual void SetColor(vec4 color)
+    {
+        m_color = color;
+    }
+    inline vec4 GetColor() const
+    {
+        return m_color;
+    }
 protected:
     GLuint m_vbo;
     vec4 m_color;

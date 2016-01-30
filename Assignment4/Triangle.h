@@ -14,8 +14,16 @@
 class Triangle : public Shape{
 public:
     Triangle(vec4 vert1Color, vec4 vert2Color, vec4 vert3Color, float radius, vec2 center);
-    virtual void Init();
-    virtual void Draw(GLuint program);
+    virtual void Init(float angle) override;
+    virtual void Update(float time) override;
+    virtual void Draw(GLuint program) override;
+    inline virtual void SetColor(vec4 color)
+    {
+        //no op here
+    }
+    inline vec4 GetColor() const {
+        return vec4(0.0);
+    }
 
 private:
     GLuint m_vbo;
