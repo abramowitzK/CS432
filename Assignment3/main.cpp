@@ -5,7 +5,6 @@
 #include "RegularPolygon.h"
 #include "Ellipsoid.h"
 #include <random>
-#include <iostream>
 //A global update ticks counter
 int globalTime = 0;
 //Handles to each of the windows and subwindows we created
@@ -74,7 +73,7 @@ void init( void ) {
     for(Shape * s : shapes) {
         s->Init(0);
     }
-    program[0] = InitShader( "vshader21.glsl", "fshader21.glsl" );
+    program[0] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     glUseProgram(program[0]);
 
     //Window 2 geometry
@@ -82,7 +81,7 @@ void init( void ) {
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // black background
     glutSetWindow(window2);
     glUseProgram(program[1]);
-    program[1] = InitShader( "vshader21.glsl", "fshader21.glsl" );
+    program[1] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     for(auto s : window2Shapes) {
         s->Init(0);
     }
@@ -91,7 +90,7 @@ void init( void ) {
     glutSetWindow(subwindow);
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // black background
     glUseProgram(program[2]);
-    program[2] = InitShader( "vshader21.glsl", "fshader21.glsl" );
+    program[2] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     for(auto s : subWindowShapes) {
         s->Init(0);
     }

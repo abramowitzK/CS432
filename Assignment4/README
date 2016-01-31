@@ -1,4 +1,13 @@
-Used the base code provided in the assignment. Outputs a shaded circle, ellipse, triangle and a square pattern.
+q - increment x transformation
+Q - decrement x transformation
+w - increment y transformation
+W - decrement y transformation
+e - increment z transformation
+E - decrement z transformation
+r - reset all transformations
+
+Moving or scaling in the z direction won't have a visible effect, but if the model is moved or scaled too much in the Z,
+it will clip out of the view volume and it won't be visible anymore
 
 Written in C++
 

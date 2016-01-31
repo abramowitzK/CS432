@@ -34,7 +34,7 @@ init( void )
         s->Init();
     }
     // Load shaders and use the resulting shader program
-    program = InitShader( "vshader21.glsl", "fshader21.glsl" );
+    program = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     glUseProgram( program );
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // white background
 }
