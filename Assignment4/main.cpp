@@ -9,7 +9,7 @@ GLuint vao[1];
 GLuint program[1];
 Object* object;
 
-typedef enum {
+enum {
     SCALE = 0,
     ROTATE = 1,
     TRANSLATE = 2
