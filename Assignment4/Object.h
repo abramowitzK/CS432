@@ -32,7 +32,7 @@ private:
     vec3 m_scale;
     GLuint m_ibo;
     GLuint m_vbo;
-    GLuint m_uniformLocation;
+    GLint m_uniformLocation;
 };
 
 

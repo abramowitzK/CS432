@@ -15,7 +15,8 @@ Object::Object() {
 }
 
 Object::~Object() {
-
+    glDeleteBuffers(1, &m_vbo);
+    glDeleteBuffers(1, &m_ibo);
 }
 
 void Object::Init(GLuint program) {
@@ -52,6 +53,7 @@ void Object::Init(GLuint program) {
             5,4,0,
             5,0,1
     };
+    //Save the indices for later in case we want to do something with them
     for(unsigned i = 0; i < 36; i++) {
         m_indices[i] = indices[i];
     }
@@ -59,7 +61,7 @@ void Object::Init(GLuint program) {
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, 8*sizeof(Vertex3D), temp, GL_STATIC_DRAW);
-    //Generate ibo for object
+    //Generate ibo for object (index buffer)
     glGenBuffers(1, &m_ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned), m_indices.data(), GL_STATIC_DRAW);
@@ -68,22 +70,20 @@ void Object::Init(GLuint program) {
     //Get uniform location once and store since we won't be changing shaders or anything like that.
     m_uniformLocation =  glGetUniformLocation(program, "mvMatrix");
 
-    GLuint vPosition = glGetAttribLocation(program, "vPosition");
+    GLint vPosition = glGetAttribLocation(program, "vPosition");
     glEnableVertexAttribArray(vPosition);
     glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(0));
-    GLuint vColor = glGetAttribLocation(program, "vColor");
+    GLint vColor = glGetAttribLocation(program, "vColor");
     glEnableVertexAttribArray(vColor);
     glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(sizeof(vec4)));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-
-
 }
 
 void Object::Draw(GLint program) {
     //view cube from -5 units away in the z direction
     mat4 mv = GetTransform();
     glUniformMatrix4fv(m_uniformLocation, 1, GL_TRUE, mv);
-    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+    glDrawElements(GL_TRIANGLES, (GLsizei)m_indices.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 }
 
 void Object::Update(float time) {
@@ -105,7 +105,6 @@ void Object::Translate(float x, float y, float z) {
     m_translation.x += x;
     m_translation.y += y;
     m_translation.z += z;
-
 }
 
 void Object::Scale(float x, float y, float z) {
@@ -115,14 +114,15 @@ void Object::Scale(float x, float y, float z) {
 }
 
 mat4 Object::GetTransform(){
+    //Called each frame. Constructs transformation matrix from transformation data
     mat4 scale = Angel::Scale(m_scale);
-    mat4 invTrans = Angel::Translate(vec4(-m_translation.x,-m_translation.y,-m_translation.z));
-    mat4 rotation = Angel::RotateX(m_rotation.x) * Angel::RotateY(m_rotation.y) * Angel::RotateZ(m_rotation.z);
-    mat4 translation = Angel::Translate(-m_translation);
-    return scale*invTrans *rotation*translation;
+    mat4 rotation = Angel::RotateX(m_rotation.x)* Angel::RotateY(m_rotation.y) * Angel::RotateZ(m_rotation.z);
+    mat4 translation = Angel::Translate(m_translation);
+    return  translation * rotation * scale;
 }
 
 void Object::Reset() {
+    //Reset to initial position
     m_translation = vec4(0.0f,0.0f,0.0f,1.0f);
     m_rotation = vec3(30.0f, 30.0f, 0.0f);
     m_scale = vec3(1.0f, 1.0f, 1.0f);

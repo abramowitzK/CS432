@@ -4,9 +4,9 @@ OPTIONS=$(GCC_OPTIONS) $(GL_OPTIONS)
 
 
 build: 
-	@g++ *.cpp Common/InitShader.o $(OPTIONS) -o assignment3
+	@g++ *.cpp Common/InitShader.o $(OPTIONS) -o assignment4
 run: build
-	@./assignment3
+	@./assignment4
 clean:
-	@rm assignment3
+	@rm assignment4
 

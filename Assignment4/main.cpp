@@ -16,6 +16,13 @@ typedef enum {
 };
 int mode = SCALE;
 void init( void ) {
+    std::cout << "This program displays a 3D cube with an orthographic projection." << std::endl;
+    std::cout << "Right click to open a menu to select a transformation." << std::endl;
+    std::cout << "Press q to decrease transformation in X direction and Q (shift q) to increase " << std::endl;
+    std::cout << "Press w to decrease transformation in Y direction and w (shift w) to increase " << std::endl;
+    std::cout << "Press e to decrease transformation in Z direction and E (shift e) to increase " << std::endl;
+    std::cout << "Press r to reset all transformations." << std::endl;
+
     // Create vertex array object
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
@@ -32,10 +39,6 @@ void display( void ) {
     object->Draw(program[0]);
     glFlush();
     glutSwapBuffers();
-}
-
-void mouse (int button, int state, int x, int y){
-
 }
 
 void mainMenu(int option){
@@ -127,9 +130,6 @@ void keyboard( unsigned char key, int x, int y ) {
     }
     glutPostRedisplay();
 }
-//Update function for everybody
-void update() {
-}
 //main function
 int main( int argc, char **argv ) {
     //Set glut state
@@ -145,8 +145,6 @@ int main( int argc, char **argv ) {
     glEnable(GL_DEPTH_TEST);
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
-    glutIdleFunc( update );
-    glutMouseFunc( mouse );
 
     glutCreateMenu(mainMenu);
     glutAddMenuEntry("Scale", SCALE);
