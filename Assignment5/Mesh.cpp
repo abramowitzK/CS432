@@ -5,10 +5,11 @@
 #include "Mesh.h"
 #include "Vertex.h"
 
-Mesh::Mesh(std::vector<vec4> points, std::vector<unsigned> indicies, std::vector<vec4> colors) {
+Mesh::Mesh(std::vector<vec4> points, std::vector<unsigned> indicies, std::vector<vec4> colors, std::vector<vec3> normals) {
     m_points = points;
     m_colors = colors;
     m_indices = indicies;
+    m_normals = normals;
     m_vertices = std::vector<Vertex3D>();
 }
 Mesh::Mesh(){}
@@ -27,16 +28,16 @@ void Mesh::Init(GLint program) {
     glGenBuffers(1, &m_ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned), m_indices.data(), GL_STATIC_DRAW);
-    //Get uniform location once and store since we won't be changing shaders or anything like that.
-
-
     GLint vPosition = glGetAttribLocation(program, "vPosition");
     glEnableVertexAttribArray(vPosition);
     glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(0));
     GLint vColor = glGetAttribLocation(program, "vColor");
     glEnableVertexAttribArray(vColor);
     glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(sizeof(vec4)));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+    GLint vNormal = glGetAttribLocation(program, "vNormal");
+    glEnableVertexAttribArray(vNormal);
+    glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(sizeof(vec4)*2));
+
 }
 
 void Mesh::Draw(GLint program) {
@@ -48,6 +49,7 @@ void Mesh::GenerateVertices(){
         Vertex3D vert;
         vert.Position = m_points[i];
         vert.Color = m_colors[i];
+        vert.normal = m_normals[i];
         m_vertices.push_back(vert);
     }
 }

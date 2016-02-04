@@ -9,7 +9,6 @@ int width = 500;
 GLuint vao[1];
 GLuint program[1];
 Object* object;
-
 enum {
     SCALE = 0,
     ROTATE = 1,
@@ -24,14 +23,14 @@ void init( void ) {
     std::cout << "Press e to decrease transformation in Z direction and E (shift e) to increase " << std::endl;
     std::cout << "Press r to reset all transformations." << std::endl;
     SMFMeshLoader loader;
-    loader.LoadFile("bunny.smf");
+    loader.LoadFile("cow-100.smf");
     // Create vertex array object
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
     program[0] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     //Using the same shader throughout. Don't need to ever change it for this assignment so we'll just set it here.
     glUseProgram(program[0]);
-    object = new Object(loader.GetMesh("bunny.smf"));
+    object = new Object(loader.GetMesh("cow-100.smf"));
     object->Init(program[0]);
     glClearColor( 1.0, 1.0, 1.0, 1.0 ); // white background
 }

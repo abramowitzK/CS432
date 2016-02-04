@@ -5,5 +5,6 @@ typedef struct
 {
     vec4 Position;
     vec4 Color;
+    vec3 normal;
 }Vertex3D;
 #endif

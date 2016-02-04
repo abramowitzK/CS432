@@ -15,6 +15,7 @@ void SMFMeshLoader::LoadFile(std::string filename) {
     std::vector<vec4> vertices;
     std::vector<unsigned> indices;
     std::vector<vec4> colors;
+    std::vector<vec3> normals;
     while(!in.eof()){
         std::string line;
         std::getline(in, line);
@@ -28,7 +29,11 @@ void SMFMeshLoader::LoadFile(std::string filename) {
             colors.push_back(vec4(0.5));
         }
     }
-    m_resourceMap[filename] = Mesh(vertices,indices,colors);
+    normals.resize(vertices.size());
+    for(int i = 0; i<indices.size(); i+=3){
+        CalcNormals(i,indices,vertices,normals);
+    }
+    m_resourceMap[filename] = Mesh(vertices,indices,colors,normals);
 }
 
 Mesh SMFMeshLoader::GetMesh(std::string filename) {
@@ -56,3 +61,14 @@ void SMFMeshLoader::ParseFace(std::vector<unsigned> &indices, const std::string 
 }
 
 
+void SMFMeshLoader::CalcNormals(int triangle, std::vector<unsigned> indices, std::vector<vec4> vertices, std::vector<vec3>& normals) {
+    vec4 p1 = vertices[indices[triangle]];
+    vec4 p2 = vertices[indices[triangle+1]];
+    vec4 p3 = vertices[indices[triangle+2]];
+    vec4 u = p2 - p1;
+    vec4 v = p3 - p1;
+    vec3 n = Angel::cross(u,v);
+    for(int i = 0; i < 3; i++) {
+        normals.push_back(n);
+    }
+}
