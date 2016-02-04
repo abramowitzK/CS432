@@ -1,0 +1,21 @@
+q - increment x transformation
+Q - decrement x transformation
+w - increment y transformation
+W - decrement y transformation
+e - increment z transformation
+E - decrement z transformation
+r - reset all transformations
+
+Capital letters are the same as pressing Shift + letter for this program.
+
+Moving or scaling in the z direction won't have a visible effect, but if the model is moved or scaled too much in the Z,
+it will clip out of the view volume and it won't be visible anymore
+
+Written in C++
+
+"make run" will compile and run the program
+
+Kyle Abramowitz
+CS432
+kra46@drexel.edu
+
