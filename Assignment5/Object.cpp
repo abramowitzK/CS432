@@ -42,15 +42,15 @@ void Object::Draw(GLint program) {
     else
         proj= Angel::Ortho(-1.0, 1.0, -1.0, 1.0, 0.1f, 1000.0f);
     proj*=mv;
-    glUniformMatrix4fv(m_mvLocation, 1, GL_TRUE, mv);
+    glUniformMatrix4fv(m_mvLocation, 1, GL_TRUE, GetTransform());
     glUniformMatrix4fv(m_mvpLocation,1, GL_TRUE, proj);
     m_mesh.Draw(program);
 }
 
 void Object::Update(float time) {
     if(!m_stop) {
-        float x = m_radius * cosf(time / 360.0 * m_speed );
-        float z = m_radius * sinf(time / 360.0 * m_speed );
+        float x = m_radius * cosf(time / 360.0 * m_speed);
+        float z = m_radius * sinf(time / 360.0 * m_speed);
         m_eye.x = x;
         m_eye.z = z;
         m_eye.y = m_height;

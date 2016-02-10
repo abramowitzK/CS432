@@ -7,23 +7,33 @@
 int height = 500;
 int width = 500;
 float t = 0.0;
+bool stop = false;
 GLuint vao[1];
 GLuint program[1];
 Object* object;
 enum Menu {
     Perspective = 0,
-    Orthographic = 1
+    Orthographic = 1,
+    Start = 2,
+    Stop = 3
 };
 void init( void ) {
+    std::cout << "This program displays a 3D bunny. Camera rotates around bunny." << std::endl;
+    std::cout << "There are 2 point lights in the scene. One at (0.75,0.0,0.75) and one at (-0.75,0.0, -0.75)" << std::endl;
+    std::cout << "Press r to increase the radius of rotation. R (shift r) to decrease" << std::endl;
+    std::cout << "Press s to increase the speed of rotation. S (shift S) to decrease" << std::endl;
+    std::cout << "Press h to increase the height. H (shift h) to decrease" << std::endl;
+    std::cout << "Right click for a menu to change from perspective to ortho and to start and stop the animaiton" << std::endl;
+
     SMFMeshLoader loader;
-    loader.LoadFile("bunny.smf");
+    loader.LoadFile("bound-bunny_5k.smf");
     // Create vertex array object
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
     program[0] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     //Using the same shader throughout. Don't need to ever change it for this assignment so we'll just set it here.
     glUseProgram(program[0]);
-    object = new Object(loader.GetMesh("bunny.smf"));
+    object = new Object(loader.GetMesh("bound-bunny_5k.smf"));
     object->Init(program[0]);
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // white background
 }
@@ -44,10 +54,19 @@ void mainMenu(int option){
         case Menu::Orthographic:
             object->SetPara(true);
             break;
+        case Menu::Start:
+            stop = false;
+            object->Start();
+            break;
+        case Menu::Stop:
+            stop = true;
+            object->Stop();
+            break;
     }
 }
 void update(){
-    t += 1.0f;
+    if(!stop)
+        t += 1.0f;
     object->Update(t);
     glutPostRedisplay();
 }
@@ -90,7 +109,7 @@ int main( int argc, char **argv ) {
 
     glutInitWindowSize( height, width );
     //create window 1 and init glew
-    glutCreateWindow( "Cube" );
+    glutCreateWindow( "Bunny Simulator 2016" );
     glewExperimental=GL_TRUE;
     glewInit();
     glEnable(GL_DEPTH_TEST);
@@ -100,6 +119,8 @@ int main( int argc, char **argv ) {
     glutCreateMenu(mainMenu);
     glutAddMenuEntry("Perspective", Menu::Perspective);
     glutAddMenuEntry("Orthographic", Menu::Orthographic);
+    glutAddMenuEntry("Start", Menu::Start);
+    glutAddMenuEntry("Stop", Menu::Stop);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
     init();
 
