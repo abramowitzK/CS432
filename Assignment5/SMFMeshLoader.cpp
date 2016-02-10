@@ -22,18 +22,21 @@ void SMFMeshLoader::LoadFile(std::string filename) {
         if(line[0] == 'f'){
             //face
             ParseFace(indices, line);
-            colors.push_back(vec4(1.0,0.0,0.0,1.0));
         } else if (line[0] == 'v'){
             //vertex
             ParseVertex(vertices, line);
-            colors.push_back(vec4(1.0,0.0,0.0,1.0));
         }
     }
-    normals.resize(vertices.size());
-    for(int i = 0; i<indices.size(); i+=3){
-        CalcNormals(i,indices,vertices,normals);
+    std::vector<vec4> newVerts;
+    for(int i = 0; i < indices.size(); i++){
+        vec4 temp = vertices[indices[i]];
+        newVerts.push_back(vec4(temp.x,temp.y,temp.z, 1.0));
+        colors.push_back(vec4(1.0,0.0,0.0,1.0));
     }
-    m_resourceMap[filename] = Mesh(vertices,indices,colors,normals);
+    for(int i = 0; i<newVerts.size(); i+=1){
+        CalcNormals(i,newVerts,normals);
+    }
+    m_resourceMap[filename] = Mesh(newVerts,colors,normals);
     //std::cout << normals[105] << std::endl;
 }
 
@@ -62,10 +65,10 @@ void SMFMeshLoader::ParseFace(std::vector<unsigned> &indices, const std::string 
 }
 
 
-void SMFMeshLoader::CalcNormals(int triangle, std::vector<unsigned> indices, std::vector<vec4> vertices, std::vector<vec3>& normals) {
-    vec4 p1 = vertices[indices[triangle]];
-    vec4 p2 = vertices[indices[triangle+1]];
-    vec4 p3 = vertices[indices[triangle+2]];
+void SMFMeshLoader::CalcNormals(int triangle, std::vector<vec4> vertices, std::vector<vec3>& normals) {
+    vec4 p1 = vertices[triangle];
+    vec4 p2 = vertices[triangle+1];
+    vec4 p3 = vertices[triangle+2];
     vec4 u = p2 - p1;
     vec4 v = p3 - p1;
     vec3 n = Angel::cross(u,v);
@@ -74,8 +77,8 @@ void SMFMeshLoader::CalcNormals(int triangle, std::vector<unsigned> indices, std
     /*for(int i = 0; i < 3; i++) {
         normals.push_back(vec3(n.x, n.y, n.z));
     }*/
-    normals[indices[triangle]] = vec3(n.x,n.y,n.z);
-    normals[indices[triangle+1]] = vec3(n.x,n.y,n.z);
-    normals[indices[triangle+2]] = vec3(n.x,n.y,n.z);
+    normals.push_back(vec3(n.x,n.y,n.z));
+    normals.push_back(vec3(n.x,n.y,n.z));
+    normals.push_back(vec3(n.x,n.y,n.z));
     //std::cout << n.x << n.y << n.z << std::endl;
 }

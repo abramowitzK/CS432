@@ -27,14 +27,14 @@ void init( void ) {
     std::cout << "NOTE: Incrementing speed will cause the object to jump a bit. It still correctly increases speed though" << std::endl;
 
     SMFMeshLoader loader;
-    loader.LoadFile("bound-bunny_5k.smf");
+    loader.LoadFile("cow-100.smf");
     // Create vertex array object
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
     program[0] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     //Using the same shader throughout. Don't need to ever change it for this assignment so we'll just set it here.
     glUseProgram(program[0]);
-    object = new Object(loader.GetMesh("bound-bunny_5k.smf"));
+    object = new Object(loader.GetMesh("cow-100.smf"));
     object->Init(program[0]);
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // white background
 }
