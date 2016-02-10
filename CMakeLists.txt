@@ -10,6 +10,6 @@ file(GLOB SOURCE_FILES
         )
 include_directories(Assignment5/include)
 
-add_executable(Assignment5 ${SOURCE_FILES} Assignment5/SMFMeshLoader.cpp Assignment5/SMFMeshLoader.h Assignment5/Mesh.cpp Assignment5/Mesh.h Assignment5/StringUtil.h.cpp)
+add_executable(Assignment5 ${SOURCE_FILES})
 target_compile_options(Assignment5 PRIVATE ${GCC_COVERAGE_COMPILE_FLAGS})
 target_link_libraries(Assignment5 PRIVATE ${GCC_COVERAGE_LINK_FLAGS})

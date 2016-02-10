@@ -7,11 +7,17 @@
 
 Object::Object(Mesh mesh) {
     m_translation = vec4(0.0f,0.0f,0.0f,1.0f);
-    m_rotation = vec3(30.0f, 30.0f, 0.0f);
+    m_rotation = vec3(0.0f, 90.0f, 0.0f);
     m_scale = vec3(1.0f, 1.0f, 1.0f);
     m_vbo = 0;
     m_ibo = 0;
     m_mesh = mesh;
+    m_stop = false;
+    m_radius = 3;
+    m_para = false;
+    m_speed = 1.0;
+    m_height = 0.0;
+    m_eye = vec4(-3.0, m_height, 0.0, 1.0);
 }
 
 
@@ -22,22 +28,34 @@ Object::~Object() {
 }
 
 void Object::Init(GLuint program) {
-       m_uniformLocation =  glGetUniformLocation(program, "mvMatrix");
-       m_mesh.Init(program);
+    m_mvLocation =  glGetUniformLocation(program, "mvMatrix");
+    m_mvpLocation = glGetUniformLocation(program, "pMatrix");
+    m_mesh.Init(program);
 }
 
 void Object::Draw(GLint program) {
     //view cube from -5 units away in the z direction
-    mat4 mv = GetTransform();
-    mat4 proj = Angel::Perspective(30.0f, 1.0, 0.1f, 1000.0f);
+    mat4 mv = Angel::LookAt(m_eye,vec4(0.0,0.0,0.0,1.0), vec4(0.0,1.0,0.0,1.0)) * GetTransform();
+    mat4 proj;
+    if(!m_para)
+        proj = Angel::Perspective(30.0f, 1.0, 0.1f, 1000.0f);
+    else
+        proj= Angel::Ortho(-1.0, 1.0, -1.0, 1.0, 0.1f, 1000.0f);
     proj*=mv;
-    glUniformMatrix4fv(m_uniformLocation, 1, GL_TRUE, proj);
+    glUniformMatrix4fv(m_mvLocation, 1, GL_TRUE, mv);
+    glUniformMatrix4fv(m_mvpLocation,1, GL_TRUE, proj);
     m_mesh.Draw(program);
 }
 
 void Object::Update(float time) {
+    if(!m_stop) {
+        float x = m_radius * cosf(time / 360.0 * m_speed );
+        float z = m_radius * sinf(time / 360.0 * m_speed );
+        m_eye.x = x;
+        m_eye.z = z;
+        m_eye.y = m_height;
+    }
 
-    //Only needed if we're updating animation or physics or something like that.
 }
 
 void Object::RotateX(float x) {

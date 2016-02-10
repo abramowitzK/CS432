@@ -6,33 +6,26 @@
 #include "SMFMeshLoader.h"
 int height = 500;
 int width = 500;
+float t = 0.0;
 GLuint vao[1];
 GLuint program[1];
 Object* object;
-enum {
-    SCALE = 0,
-    ROTATE = 1,
-    TRANSLATE = 2
+enum Menu {
+    Perspective = 0,
+    Orthographic = 1
 };
-int mode = SCALE;
 void init( void ) {
-    std::cout << "This program displays a 3D cube with an orthographic projection." << std::endl;
-    std::cout << "Right click to open a menu to select a transformation." << std::endl;
-    std::cout << "Press q to decrease transformation in X direction and Q (shift q) to increase " << std::endl;
-    std::cout << "Press w to decrease transformation in Y direction and w (shift w) to increase " << std::endl;
-    std::cout << "Press e to decrease transformation in Z direction and E (shift e) to increase " << std::endl;
-    std::cout << "Press r to reset all transformations." << std::endl;
     SMFMeshLoader loader;
-    loader.LoadFile("cow-100.smf");
+    loader.LoadFile("bunny.smf");
     // Create vertex array object
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
     program[0] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     //Using the same shader throughout. Don't need to ever change it for this assignment so we'll just set it here.
     glUseProgram(program[0]);
-    object = new Object(loader.GetMesh("cow-100.smf"));
+    object = new Object(loader.GetMesh("bunny.smf"));
     object->Init(program[0]);
-    glClearColor( 1.0, 1.0, 1.0, 1.0 ); // white background
+    glClearColor( 0.0, 0.0, 0.0, 1.0 ); // white background
 }
 //Main window display function
 void display( void ) {
@@ -45,16 +38,18 @@ void display( void ) {
 void mainMenu(int option){
 
     switch (option){
-        case SCALE :
-            mode = SCALE;
+        case Menu::Perspective:
+            object->SetPara(false);
             break;
-        case ROTATE:
-            mode = ROTATE;
-            break;
-        case TRANSLATE:
-            mode = TRANSLATE;
+        case Menu::Orthographic:
+            object->SetPara(true);
             break;
     }
+}
+void update(){
+    t += 1.0f;
+    object->Update(t);
+    glutPostRedisplay();
 }
 //Main window keyboard function
 void keyboard( unsigned char key, int x, int y ) {
@@ -63,71 +58,27 @@ void keyboard( unsigned char key, int x, int y ) {
         case 033: {
             delete object;
             exit(EXIT_SUCCESS);
-        }
-        case 'w': {
-            if(mode == SCALE){
-                object->Scale(0.0,0.05,0.0);
-            } else if (mode == ROTATE){
-                object->RotateY(2.0f);
-            } else {
-                object->Translate(0.0,0.05,0.0);
-            }
+            break;
+        case 'r':
+            object->IncreaseRadius();
+            break;
+        case 'R':
+            object->DecreaseRadius();
+            break;
+        case 'h':
+            object->IncreaseHeight();
+            break;
+        case 'H':
+            object->DecreaseHeight();
+            break;
+        case 's':
+            object->IncrementSpeed();
+            break;
+        case 'S':
+            object->DecrementSpeed();
             break;
         }
-        case 'W': {
-            if(mode == SCALE){
-                object->Scale(0.0,-0.05,0.0);
-            } else if (mode == ROTATE){
-                object->RotateY(-2.0f);
-            } else {
-                object->Translate(0.0,-0.05,0.0);
-            }
-            break;
-        }
-        case 'q': {
-            if(mode == SCALE){
-                object->Scale(0.05,0.0,0.0);
-            } else if (mode == ROTATE){
-                object->RotateX(2.0f);
-            } else {
-                object->Translate(0.05,0.0,0.0);
-            }
-            break;
-        }
-        case 'Q': {
-            if(mode == SCALE){
-                object->Scale(-0.05,0.0,0.0);
-            } else if (mode == ROTATE){
-                object->RotateX(-2.0f);
-            } else {
-                object->Translate(-0.05,0.0,0.0);
-            }
-            break;
-        }
-        case 'e': {
-            if(mode == SCALE){
-                object->Scale(0.0,0.0,0.05);
-            } else if (mode == ROTATE){
-                object->RotateZ(2.0f);
-            } else {
-                object->Translate(0.0,0.0,0.05);
-            }
-            break;
-        }
-        case 'E': {
-            if(mode == SCALE){
-                object->Scale(0.0,0.0,-0.05);
-            } else if (mode == ROTATE){
-                object->RotateZ(-2.0f);
-            } else {
-                object->Translate(0.0,0.0,-0.05);
-            };
-            break;
-        }
-        case 'r':{
-            //Reset all transforms;
-            object->Reset();
-        }
+
     }
     glutPostRedisplay();
 }
@@ -145,11 +96,10 @@ int main( int argc, char **argv ) {
     glEnable(GL_DEPTH_TEST);
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
-
+    glutIdleFunc(update);
     glutCreateMenu(mainMenu);
-    glutAddMenuEntry("Scale", SCALE);
-    glutAddMenuEntry("Rotate", ROTATE);
-    glutAddMenuEntry("Translate", TRANSLATE);
+    glutAddMenuEntry("Perspective", Menu::Perspective);
+    glutAddMenuEntry("Orthographic", Menu::Orthographic);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
     init();
 

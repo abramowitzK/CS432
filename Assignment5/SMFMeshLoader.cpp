@@ -22,11 +22,11 @@ void SMFMeshLoader::LoadFile(std::string filename) {
         if(line[0] == 'f'){
             //face
             ParseFace(indices, line);
-            colors.push_back(vec4(0.5));
+            colors.push_back(vec4(1.0,0.0,0.0,1.0));
         } else if (line[0] == 'v'){
             //vertex
             ParseVertex(vertices, line);
-            colors.push_back(vec4(0.5));
+            colors.push_back(vec4(1.0,0.0,0.0,1.0));
         }
     }
     normals.resize(vertices.size());
@@ -34,6 +34,7 @@ void SMFMeshLoader::LoadFile(std::string filename) {
         CalcNormals(i,indices,vertices,normals);
     }
     m_resourceMap[filename] = Mesh(vertices,indices,colors,normals);
+    //std::cout << normals[105] << std::endl;
 }
 
 Mesh SMFMeshLoader::GetMesh(std::string filename) {
@@ -68,7 +69,13 @@ void SMFMeshLoader::CalcNormals(int triangle, std::vector<unsigned> indices, std
     vec4 u = p2 - p1;
     vec4 v = p3 - p1;
     vec3 n = Angel::cross(u,v);
-    for(int i = 0; i < 3; i++) {
-        normals.push_back(n);
-    }
+    n = Angel::normalize(n);
+    //Assign the same normal to each vertex of the triangle
+    /*for(int i = 0; i < 3; i++) {
+        normals.push_back(vec3(n.x, n.y, n.z));
+    }*/
+    normals[indices[triangle]] = vec3(n.x,n.y,n.z);
+    normals[indices[triangle+1]] = vec3(n.x,n.y,n.z);
+    normals[indices[triangle+2]] = vec3(n.x,n.y,n.z);
+    //std::cout << n.x << n.y << n.z << std::endl;
 }
