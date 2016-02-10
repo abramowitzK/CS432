@@ -24,6 +24,7 @@ void init( void ) {
     std::cout << "Press s to increase the speed of rotation. S (shift S) to decrease" << std::endl;
     std::cout << "Press h to increase the height. H (shift h) to decrease" << std::endl;
     std::cout << "Right click for a menu to change from perspective to ortho and to start and stop the animaiton" << std::endl;
+    std::cout << "NOTE: Incrementing speed will cause the object to jump a bit. It still correctly increases speed though" << std::endl;
 
     SMFMeshLoader loader;
     loader.LoadFile("bound-bunny_5k.smf");
