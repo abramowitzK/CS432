@@ -12,10 +12,15 @@ GLuint vao[1];
 GLuint program[1];
 Object* object;
 enum Menu {
-    Perspective = 0,
-    Orthographic = 1,
-    Start = 2,
-    Stop = 3
+    ShineyRed = 0,
+    DullGreen = 1,
+    MatteBlue = 2,
+    Phong = 3,
+    Gouraud = 4,
+    Stop = 5,
+    Start = 6,
+    Perspective = 7,
+    Orthographic = 8
 };
 void init( void ) {
     std::cout << "This program displays a 3D bunny. Camera rotates around bunny." << std::endl;
@@ -27,14 +32,14 @@ void init( void ) {
     std::cout << "NOTE: Incrementing speed will cause the object to jump a bit. It still correctly increases speed though" << std::endl;
 
     SMFMeshLoader loader;
-    loader.LoadFile("bound-bunny_5k.smf");
+    loader.LoadFile("bound-bunny_1k.smf");
     // Create vertex array object
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
     program[0] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     //Using the same shader throughout. Don't need to ever change it for this assignment so we'll just set it here.
     glUseProgram(program[0]);
-    object = new Object(loader.GetMesh("bound-bunny_5k.smf"));
+    object = new Object(loader.GetMesh("bound-bunny_1k.smf"));
     object->Init(program[0]);
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // white background
 }
@@ -49,11 +54,20 @@ void display( void ) {
 void mainMenu(int option){
 
     switch (option){
-        case Menu::Perspective:
-            object->SetPara(false);
+        case Menu::Phong:
+            object->SetGouraud(false);
             break;
-        case Menu::Orthographic:
-            object->SetPara(true);
+        case Menu::Gouraud:
+            object->SetGouraud(true);
+            break;
+        case Menu::ShineyRed:
+            object->SetMat(1);
+            break;
+        case Menu::DullGreen:
+            object->SetMat(2);
+            break;
+        case Menu::MatteBlue:
+            object->SetMat(3);
             break;
         case Menu::Start:
             stop = false;
@@ -63,11 +77,18 @@ void mainMenu(int option){
             stop = true;
             object->Stop();
             break;
+        case Menu::Perspective:
+            object->SetPara(false);
+            break;
+        case Menu::Orthographic:
+            object->SetPara(true);
+            break;
     }
 }
-void update(){
-    if(!stop)
+void update() {
+    if (!stop) {
         t += 1.0f;
+    }
     object->Update(t);
     glutPostRedisplay();
 }
@@ -75,32 +96,48 @@ void update(){
 void keyboard( unsigned char key, int x, int y ) {
     switch ( key ) {
         //Cleanup any resources we allocated since we're exiting the application
-        case 033: {
+        case 033:
             delete object;
             exit(EXIT_SUCCESS);
             break;
-        case 'r':
-            object->IncreaseRadius();
-            break;
-        case 'R':
-            object->DecreaseRadius();
-            break;
-        case 'h':
-            object->IncreaseHeight();
-            break;
-        case 'H':
-            object->DecreaseHeight();
-            break;
-        case 's':
-            object->IncrementSpeed();
-            break;
-        case 'S':
-            object->DecrementSpeed();
-            break;
-        }
-
+            case 'r':
+                object->IncreaseRadius();
+                break;
+            case 'R':
+                object->DecreaseRadius();
+                break;
+            case 'h':
+                object->IncreaseHeight();
+                break;
+            case 'H':
+                object->DecreaseHeight();
+                break;
+            case 's':
+                object->IncrementSpeed();
+                break;
+            case 'S':
+                object->DecrementSpeed();
+                break;
+            case 'a':
+                object->IncrementAngle();
+                break;
+            case 'A':
+                object->DecrementAngle();
+                break;
+            case 'l':
+                object->IncrementHeight();
+                break;
+            case 'L':
+                object->DecrementHeight();
+                break;
+            case 'c':
+                object->IncrementLightRadius();
+                break;
+            case 'C':
+                object->DecrementLightRadius();
+                break;
     }
-    glutPostRedisplay();
+    update();
 }
 //main function
 int main( int argc, char **argv ) {
@@ -118,10 +155,15 @@ int main( int argc, char **argv ) {
     glutKeyboardFunc( keyboard );
     glutIdleFunc(update);
     glutCreateMenu(mainMenu);
+    glutAddMenuEntry("Shiney Red", Menu::ShineyRed);
+    glutAddMenuEntry("Dull Green", Menu::DullGreen);
+    glutAddMenuEntry("MatteBlue", Menu::MatteBlue);
+    glutAddMenuEntry("Gouraud", Menu::Gouraud);
+    glutAddMenuEntry("Phong", Menu::Phong);
+    glutAddMenuEntry("Start Camera Rotation", Menu::Start);
+    glutAddMenuEntry("Stop Camera Rotation", Menu::Stop);
     glutAddMenuEntry("Perspective", Menu::Perspective);
     glutAddMenuEntry("Orthographic", Menu::Orthographic);
-    glutAddMenuEntry("Start", Menu::Start);
-    glutAddMenuEntry("Stop", Menu::Stop);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
     init();
 

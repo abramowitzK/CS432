@@ -18,6 +18,13 @@ Object::Object(Mesh mesh) {
     m_speed = 1.0;
     m_height = 0.0;
     m_eye = vec4(-3.0, m_height, 0.0, 1.0);
+    m_gouraud = true;
+    m_usePhong = false;
+    m_mat = 1;
+    m_lightAngle = 180.0f;
+    m_lightLocation = vec3();
+    m_lightHeight = 0.0;
+    m_lightRadius = 5.0;
 }
 
 
@@ -28,33 +35,52 @@ Object::~Object() {
 }
 
 void Object::Init(GLuint program) {
-    m_mvLocation =  glGetUniformLocation(program, "mvMatrix");
-    m_mvpLocation = glGetUniformLocation(program, "pMatrix");
+    m_mLocation =  glGetUniformLocation(program, "mMatrix");
+    m_vLocation = glGetUniformLocation(program, "vMatrix");
+    m_pLocation = glGetUniformLocation(program, "pMatrix");
+    m_gouraudLocation = glGetUniformLocation(program, "gouraud");
+    m_usePhongLocation = glGetUniformLocation(program, "usePhong");
+    m_fViewLocation = glGetUniformLocation(program, "fView");
+    m_fMatLocation = glGetUniformLocation(program, "fMaterial");
+    m_vMatLocation = glGetUniformLocation(program, "vMaterial");
+    m_vlightPosLocation = glGetUniformLocation(program, "vlight2pos");
+    m_flightPosLocation = glGetUniformLocation(program, "flight2pos");
     m_mesh.Init(program);
+    m_lightLocation.x = cosf(m_lightAngle) * m_lightRadius;
+    m_lightLocation.y = m_lightHeight;
+    m_lightLocation.z = sinf(m_lightAngle) * m_lightRadius;
 }
 
 void Object::Draw(GLint program) {
     //view cube from -5 units away in the z direction
-    mat4 mv = Angel::LookAt(m_eye,vec4(0.0,0.0,0.0,1.0), vec4(0.0,1.0,0.0,1.0)) * GetTransform();
+    glUniform1i(m_gouraudLocation, m_gouraud);
+    glUniform1i(m_usePhongLocation, m_usePhong);
+    glUniform1i(m_vMatLocation, m_mat);
+    glUniform1i(m_fMatLocation, m_mat);
+    glUniform3fv(m_vlightPosLocation,1,m_lightLocation);
+    glUniform3fv(m_flightPosLocation,1,m_lightLocation);
+    mat4 v = Angel::LookAt(m_eye,vec4(0.0,0.0,0.0,1.0), vec4(0.0,1.0,0.0,1.0));
+    glUniformMatrix4fv(m_mLocation, 1, GL_TRUE, GetTransform());
     mat4 proj;
     if(!m_para)
         proj = Angel::Perspective(30.0f, 1.0, 0.1f, 1000.0f);
     else
         proj= Angel::Ortho(-1.0, 1.0, -1.0, 1.0, 0.1f, 1000.0f);
-    proj*=mv;
-    glUniformMatrix4fv(m_mvLocation, 1, GL_TRUE, GetTransform());
-    glUniformMatrix4fv(m_mvpLocation,1, GL_TRUE, proj);
+    glUniformMatrix4fv(m_vLocation, 1, GL_TRUE,  v);
+    glUniformMatrix4fv(m_fViewLocation, 1, GL_TRUE, v);
+    glUniformMatrix4fv(m_pLocation,1, GL_TRUE, proj);
     m_mesh.Draw(program);
 }
 
 void Object::Update(float time) {
-    if(!m_stop) {
-        float x = m_radius * cosf(time / 360.0 * m_speed);
-        float z = m_radius * sinf(time / 360.0 * m_speed);
-        m_eye.x = x;
-        m_eye.z = z;
-        m_eye.y = m_height;
-    }
+    float x = m_radius * cosf(time / 360.0 * m_speed);
+    float z = m_radius * sinf(time / 360.0 * m_speed);
+    m_eye.x = x;
+    m_eye.z = z;
+    m_eye.y = m_height;
+    m_lightLocation.x = cosf(m_lightAngle)*m_lightRadius;
+    m_lightLocation.y = m_lightHeight;
+    m_lightLocation.z = sinf(m_lightAngle)*m_lightRadius;
 
 }
 

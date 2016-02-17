@@ -52,23 +52,68 @@ public:
     inline void SetPara(bool para){
         m_para = para;
     }
-
+    inline void SetGouraud(bool shading){
+        if(shading) {
+            m_gouraud = true;
+            m_usePhong = false;
+        }
+        else {
+            m_usePhong = true;
+            m_gouraud = false;
+        }
+    }
+    inline void SetMat(int mat){
+        m_mat = mat;
+    }
+    inline void IncrementAngle(){
+        m_lightAngle+=0.2;
+    }
+    inline void DecrementAngle(){
+        m_lightAngle-=0.2;
+    }
+    inline void IncrementHeight(){
+        m_lightHeight+=0.05;
+    }
+    inline void DecrementHeight(){
+        m_lightHeight-=0.05;
+    }
+    inline void IncrementLightRadius(){
+        m_lightRadius += 0.1;
+    }
+    inline void DecrementLightRadius(){
+        m_lightRadius-=0.1;
+    }
 
 private:
+    GLint m_mat;
     bool m_para;
     bool m_stop;
+    bool m_gouraud;
+    bool m_usePhong;
     Mesh m_mesh;
     vec4 m_translation;
     vec3 m_rotation;
     vec3 m_scale;
+    vec3 m_lightLocation;
     GLuint m_ibo;
     GLuint m_vbo;
-    GLint m_mvLocation;
-    GLint m_mvpLocation;
+    GLint m_mLocation;
+    GLint m_vLocation;
+    GLint m_pLocation;
+    GLint m_gouraudLocation;
+    GLint m_usePhongLocation;
+    GLint m_fViewLocation;
+    GLint m_vMatLocation;
+    GLint m_fMatLocation;
+    GLint m_vlightPosLocation;
+    GLint m_flightPosLocation;
     vec4 m_eye;
     float m_radius;
     float m_height;
     float m_speed;
+    float m_lightRadius;
+    float m_lightHeight;
+    float m_lightAngle;
 };
 
 

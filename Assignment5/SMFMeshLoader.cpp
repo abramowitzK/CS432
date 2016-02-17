@@ -15,10 +15,10 @@ void SMFMeshLoader::LoadFile(std::string filename) {
     std::vector<vec4> vertices;
     std::vector<unsigned> indices;
     std::vector<vec4> colors;
+    std::vector<vec3> faceNormals;
     std::vector<vec3> normals;
-    while(!in.eof()){
-        std::string line;
-        std::getline(in, line);
+    std::string line;
+    while(std::getline(in,line)){
         if(line[0] == 'f'){
             //face
             ParseFace(indices, line);
@@ -29,10 +29,28 @@ void SMFMeshLoader::LoadFile(std::string filename) {
             colors.push_back(vec4(1.0,0.0,0.0,1.0));
         }
     }
-    normals.resize(vertices.size());
-    for(int i = 0; i<indices.size(); i+=3){
-        CalcNormals(i,indices,vertices,normals);
+    normals.resize(indices.size());
+    /*for(int i = 0; i<faceNormals.size(); i++){
+        CalcFaceNormals(i,indices,vertices,faceNormals);
+    }*/
+    for(int i = 0; i < indices.size(); i+=3){
+        vec4 p1 = vertices[indices[i]];
+        vec4 p2 = vertices[indices[i+1]];
+        vec4 p3 = vertices[indices[i+2]];
+        vec4 u = p2 - p1;
+        vec4 v = p3 - p1;
+        vec3 n = Angel::cross(u,v);
+        faceNormals.push_back(vec3(n.x,n.y,n.z));
     }
+    for(int i = 0; i < indices.size(); i++){
+        unsigned f = i/3;
+        unsigned v = indices[i];
+        normals[v] += faceNormals[f];
+    }
+    for(int i = 0; i < normals.size(); i++){
+        normals[i] = Angel::normalize(normals[i]);
+    }
+    CalcVertexNormals(indices,faceNormals,normals);
     m_resourceMap[filename] = Mesh(vertices,indices,colors,normals);
     //std::cout << normals[105] << std::endl;
 }
@@ -62,20 +80,20 @@ void SMFMeshLoader::ParseFace(std::vector<unsigned> &indices, const std::string 
 }
 
 
-void SMFMeshLoader::CalcNormals(int triangle, std::vector<unsigned> indices, std::vector<vec4> vertices, std::vector<vec3>& normals) {
+void SMFMeshLoader::CalcFaceNormals(int triangle, const std::vector<unsigned> &indices, const std::vector<vec4> &vertices, std::vector<vec3>& faceNormals) {
     vec4 p1 = vertices[indices[triangle]];
     vec4 p2 = vertices[indices[triangle+1]];
     vec4 p3 = vertices[indices[triangle+2]];
     vec4 u = p2 - p1;
     vec4 v = p3 - p1;
     vec3 n = Angel::cross(u,v);
-    n = Angel::normalize(n);
-    //Assign the same normal to each vertex of the triangle
-    /*for(int i = 0; i < 3; i++) {
-        normals.push_back(vec3(n.x, n.y, n.z));
-    }*/
-    normals[indices[triangle]] = vec3(n.x,n.y,n.z);
-    normals[indices[triangle+1]] = vec3(n.x,n.y,n.z);
-    normals[indices[triangle+2]] = vec3(n.x,n.y,n.z);
-    //std::cout << n.x << n.y << n.z << std::endl;
+    faceNormals[triangle] = vec3(n.x,n.y,n.z);
 }
+void SMFMeshLoader::CalcVertexNormals(const std::vector<unsigned> &indices, const std::vector<vec3> &faceNormals, std::vector<vec3>& normals) {
+    for(int i = 0; i < indices.size(); i++){
+        unsigned f = i/3;
+        unsigned v = indices[i];
+        normals[v] += faceNormals[f];
+        Angel::normalize(normals[v]);
+    }
+};
