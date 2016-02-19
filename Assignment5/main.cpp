@@ -24,12 +24,15 @@ enum Menu {
 };
 void init( void ) {
     std::cout << "This program displays a 3D bunny. Camera rotates around bunny." << std::endl;
-    std::cout << "There are 2 point lights in the scene. One at (0.75,0.0,0.75) and one at (-0.75,0.0, -0.75)" << std::endl;
     std::cout << "Press r to increase the radius of rotation. R (shift r) to decrease" << std::endl;
     std::cout << "Press s to increase the speed of rotation. S (shift S) to decrease" << std::endl;
     std::cout << "Press h to increase the height. H (shift h) to decrease" << std::endl;
     std::cout << "Right click for a menu to change from perspective to ortho and to start and stop the animaiton" << std::endl;
+    std::cout << "Right click to change materials (shiney red, dull green, matteblue (slightly shiney)" << std::endl;
     std::cout << "NOTE: Incrementing speed will cause the object to jump a bit. It still correctly increases speed though" << std::endl;
+    std::cout << "Press c to increase the radius of the object light. C (shift c) to decrease" << std::endl;
+    std::cout << "Press l to increase height of the object light. L (shift l) to decrease" << std::endl;
+    std::cout << "Press a to increase light angle around cylinder. A (shift a) to decrease" << std::endl;
 
     SMFMeshLoader loader;
     loader.LoadFile("bound-bunny_1k.smf");
