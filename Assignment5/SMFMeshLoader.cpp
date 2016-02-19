@@ -96,4 +96,4 @@ void SMFMeshLoader::CalcVertexNormals(const std::vector<unsigned> &indices, cons
         normals[v] += faceNormals[f];
         Angel::normalize(normals[v]);
     }
-};
+}
