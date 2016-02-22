@@ -4,7 +4,7 @@
 #include "Angel.h"
 #include "Object.h"
 #include "SMFMeshLoader.h"
-
+#include "BezierPointReader.h"
 int height = 500;
 int width = 500;
 float t = 0.0;
@@ -35,15 +35,15 @@ void init( void ) {
     std::cout << "Press l to increase height of the object light. L (shift l) to decrease" << std::endl;
     std::cout << "Press a to increase light angle around cylinder. A (shift a) to decrease" << std::endl;
 
-    SMFMeshLoader loader;
-    loader.LoadFile("bez_ptch.smf");
+    BezierPointReader loader;
+    loader.LoadFile("controlPoints.txt");
     // Create vertex array object
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
     program[0] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     //Using the same shader throughout. Don't need to ever change it for this assignment so we'll just set it here.
     glUseProgram(program[0]);
-    object = new Object(loader.GetMesh("bez_ptch.smf"));
+    object = new Object(loader.GetMesh(100));
     object->Init(program[0]);
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // white background
 }
