@@ -6,7 +6,7 @@ h - increment height
 H - decrement height
 Right click menu to change projection and to start/stop animation.
 
-Capital letters are the same as pressing Shift + letter for this program.
+See instructions that print when program starts.
 
 
 Written in C++

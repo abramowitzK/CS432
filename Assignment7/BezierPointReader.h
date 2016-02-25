@@ -19,6 +19,12 @@ public:
     void LoadFile(std::string filename);
     Mesh GetMesh(int sampling);
     vec4 GetPointOnBezierSurface(float u, float v);
+    std::vector<Vertex3D> GetControlPoints();
+    void UpdateControlPoints(int index, float x, float y, float z){
+        m_controlPoints[index/4][index%4].x+=x;
+        m_controlPoints[index/4][index%4].y+=y;
+        m_controlPoints[index/4][index%4].z+=z;
+    }
 private:
     vec3 ParseVertex(std::string line);
     float Bernstein(float t, int i);

@@ -12,6 +12,8 @@ bool stop = false;
 GLuint vao[1];
 GLuint program[1];
 Object* object;
+unsigned int samples = 5;
+static BezierPointReader loader;
 enum Menu {
     ShineyRed = 0,
     DullGreen = 1,
@@ -24,6 +26,8 @@ enum Menu {
     Orthographic = 8
 };
 void init( void ) {
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPointSize(10);
     std::cout << "This program displays a 3D bunny. Camera rotates around bunny." << std::endl;
     std::cout << "Press r to increase the radius of rotation. R (shift r) to decrease" << std::endl;
     std::cout << "Press s to increase the speed of rotation. S (shift S) to decrease" << std::endl;
@@ -31,11 +35,11 @@ void init( void ) {
     std::cout << "Right click for a menu to change from perspective to ortho and to start and stop the animaiton" << std::endl;
     std::cout << "Right click to change materials (shiney red, dull green, matteblue (slightly shiney)" << std::endl;
     std::cout << "NOTE: Incrementing speed will cause the object to jump a bit. It still correctly increases speed though" << std::endl;
-    std::cout << "Press c to increase the radius of the object light. C (shift c) to decrease" << std::endl;
-    std::cout << "Press l to increase height of the object light. L (shift l) to decrease" << std::endl;
-    std::cout << "Press a to increase light angle around cylinder. A (shift a) to decrease" << std::endl;
-
-    BezierPointReader loader;
+    std::cout << "Press P (shift-P) to iterate through points" << std::endl;
+    std::cout << "x,y,z to increase x,y,z coordinates of selected points. Shift X, Y, or Z to decrease" << std:: endl;
+    std::cout << "1 to enable wireframe(didn't have time to implement flat shading) to see tesselation changes " << std::endl;
+    std::cout << "2 to enable filling" << std::endl;
+    std::cout << "Camera rotates around the surface. You can stop and start this rotation." << std::endl;
     loader.LoadFile("controlPoints.txt");
     // Create vertex array object
     glGenVertexArrays( 1, vao );
@@ -43,9 +47,10 @@ void init( void ) {
     program[0] = InitShader( "vcubeshader.glsl", "fcubeshader.glsl" );
     //Using the same shader throughout. Don't need to ever change it for this assignment so we'll just set it here.
     glUseProgram(program[0]);
-    object = new Object(loader.GetMesh(100));
-    object->Init(program[0]);
-    glClearColor( 0.0, 0.0, 0.0, 1.0 ); // white background
+    object = new Object(loader.GetMesh(samples));
+    object->Init(program[0], loader);
+    glClearColor( 1.0, 1.0, 1.0, 1.0 ); // white background
+    object->SetGouraud(false);
 }
 //Main window display function
 void display( void ) {
@@ -58,12 +63,6 @@ void display( void ) {
 void mainMenu(int option){
 
     switch (option){
-        case Menu::Phong:
-            object->SetGouraud(false);
-            break;
-        case Menu::Gouraud:
-            object->SetGouraud(true);
-            break;
         case Menu::ShineyRed:
             object->SetMat(1);
             break;
@@ -93,7 +92,7 @@ void update() {
     if (!stop) {
         t += 1.0f;
     }
-    object->Update(t);
+    object->Update(t, loader);
     glutPostRedisplay();
 }
 //Main window keyboard function
@@ -104,42 +103,94 @@ void keyboard( unsigned char key, int x, int y ) {
             delete object;
             exit(EXIT_SUCCESS);
             break;
-            case 'r':
-                object->IncreaseRadius();
-                break;
-            case 'R':
-                object->DecreaseRadius();
-                break;
-            case 'h':
-                object->IncreaseHeight();
-                break;
-            case 'H':
-                object->DecreaseHeight();
-                break;
-            case 's':
-                object->IncrementSpeed();
-                break;
-            case 'S':
-                object->DecrementSpeed();
-                break;
-            case 'a':
-                object->IncrementAngle();
-                break;
-            case 'A':
-                object->DecrementAngle();
-                break;
-            case 'l':
-                object->IncrementHeight();
-                break;
-            case 'L':
-                object->DecrementHeight();
-                break;
-            case 'c':
-                object->IncrementLightRadius();
-                break;
-            case 'C':
-                object->DecrementLightRadius();
-                break;
+        case 'r':
+            object->IncreaseRadius();
+            break;
+        case 'R':
+            object->DecreaseRadius();
+            break;
+        case 'h':
+            object->IncreaseHeight();
+            break;
+        case 'H':
+            object->DecreaseHeight();
+            break;
+        case 's':
+            object->IncrementSpeed();
+            break;
+        case 'S':
+            object->DecrementSpeed();
+            break;
+        case 'a':
+            object->IncrementAngle();
+            break;
+        case 'A':
+            object->DecrementAngle();
+            break;
+        case 'l':
+            object->IncrementHeight();
+            break;
+        case 'L':
+            object->DecrementHeight();
+            break;
+        case 'c':
+            object->IncrementLightRadius();
+            break;
+        case 'C':
+            object->DecrementLightRadius();
+            break;
+        case 't':
+            samples++;
+            object->ChangeMesh(loader.GetMesh(samples), program[0]);
+            break;
+        case 'T':
+            if (samples == 1) {
+                std::cout << "Cannot reduce tesselation any further" << std::endl;
+                return;
+            }
+            samples--;
+            object->ChangeMesh(loader.GetMesh(samples), program[0]);
+            break;
+        case 'P':
+            object->SelectNextControlPoint();
+            break;
+        case 'x':
+            loader.UpdateControlPoints(object->GetSelectedControlPoint(), 0.1, 0.0,0.0);
+            object->ChangeMesh(loader.GetMesh(samples), program[0]);
+            object->UpdatePoints(loader);
+            break;
+        case 'X':
+            loader.UpdateControlPoints(object->GetSelectedControlPoint(), -0.1, 0.0,0.0);
+            object->ChangeMesh(loader.GetMesh(samples), program[0]);
+            object->UpdatePoints(loader);
+            break;
+        case 'y':
+            loader.UpdateControlPoints(object->GetSelectedControlPoint(), 0.0, 0.1,0.0);
+            object->ChangeMesh(loader.GetMesh(samples), program[0]);
+            object->UpdatePoints(loader);
+            break;
+        case 'Y':
+            loader.UpdateControlPoints(object->GetSelectedControlPoint(), 0.0, -0.1,0.0);
+            object->ChangeMesh(loader.GetMesh(samples), program[0]);
+            object->UpdatePoints(loader);
+            break;
+        case 'z':
+            loader.UpdateControlPoints(object->GetSelectedControlPoint(), 0.0, 0.0,0.1);
+            object->ChangeMesh(loader.GetMesh(samples), program[0]);
+            object->UpdatePoints(loader);
+            break;
+        case 'Z':
+            loader.UpdateControlPoints(object->GetSelectedControlPoint(), 0.0, 0.0,-0.1);
+            object->ChangeMesh(loader.GetMesh(samples), program[0]);
+            object->UpdatePoints(loader);
+            break;
+        case '1':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            break;
+        case '2':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            break;
+
     }
     update();
 }

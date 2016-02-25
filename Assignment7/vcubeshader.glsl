@@ -17,8 +17,8 @@ uniform mat4 pMatrix;
 uniform bool gouraud;
 uniform int vMaterial;
 uniform vec3 vlight2pos;
+uniform vec4 flatColor;
 vec3 LightPos1 = vec3(0.0, 0.0, 0.0);
-vec3 LightPos2 = vlight2pos;
 struct Material{
     vec4 ambientColor;
     vec4 diffuseColor;
@@ -43,28 +43,28 @@ void main()
         mat4 normalMatrix = mMatrix;
         //Transform the normal and the vertex into camera coordinates. Don't apply projection.
         vec4 transformed= (modelView*vPosition);
-        vec4 transformed2 =mMatrix * vPosition;
-        vec3 transformedVertex2 = (transformed2.xyz)/transformed2.w;
+        //vec4 transformed2 =mMatrix * vPosition;
+        //vec3 transformedVertex2 = (transformed2.xyz)/transformed2.w;
         vec3 transformedVertex = vec3(transformed)/transformed.w;
         vec3 transformedNormal = normalize((modelView*vec4(vNormal,0.0)).xyz);
-        vec3 transformedNormal2 = normalize((mMatrix*vec4(vNormal,0.0)).xyz);//normalize((mMatrix*vec4(vNormal,0.0))).xyz;
+        //vec3 transformedNormal2 = normalize((mMatrix*vec4(vNormal,0.0)).xyz);//normalize((mMatrix*vec4(vNormal,0.0))).xyz;
         //Calculate the distance from the lights to the vertex after it's been transformed
         float distance = length(LightPos1 - transformedVertex);
-        float distance2 = length(LightPos2 - transformedVertex2);
+        //float distance2 = length(LightPos2 - transformedVertex2);
         //Get the vector from vertex to light
         vec3 lightVector = normalize(LightPos1 - transformedVertex);
-        vec3 lightVector2 = normalize(LightPos2 - transformedVertex2);
+        //vec3 lightVector2 = normalize(LightPos2 - transformedVertex2);
         //Calculate the diffuse coefficient using inverse square law and dot prod
         float diffuse = max(dot(transformedNormal, lightVector), 0.0);
-        float diffuse2 = max(dot(transformedNormal2, lightVector2), 0.0);
-        float attenuation = (1.0 / (1.0 + (0.2* pow(distance,2))));
-        float attenuation2 = (1.0/ (1.0 + (0.2* pow(distance2,2))));
+        //float diffuse2 = max(dot(transformedNormal2, lightVector2), 0.0);
+        float attenuation = (100.0 / (1.0 + ( pow(distance,2))));
+        //float attenuation2 = (1.0/ (1.0 + (0.2* pow(distance2,2))));
         diffuse = diffuse * attenuation;
-        diffuse2 = diffuse2 * attenuation2;
+        //diffuse2 = diffuse2 * attenuation2;
         //Set the final color
         outColor = mat.ambientColor +
-        +mat.diffuseColor*diffuse
-        +mat.diffuseColor* diffuse2;
+        +mat.diffuseColor*diffuse;
+        //+mat.diffuseColor* diffuse2;
     }
     else{
         model = mMatrix;

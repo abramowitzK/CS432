@@ -10,14 +10,16 @@
 #include <string>
 #include "Vertex.h"
 #include "Mesh.h"
+#include "BezierPointReader.h"
+
 class Object {
 
 public:
     Object(Mesh mesh);
     virtual ~Object();
-    virtual void Init(GLuint program);
+    virtual void Init(GLuint program, BezierPointReader rdr);
     virtual void Draw(GLint program);
-    virtual void Update(float time);
+    virtual void Update(float time,BezierPointReader rdr);
     void RotateX(float x);
     void RotateY(float y);
     void RotateZ(float z);
@@ -83,8 +85,21 @@ public:
     inline void DecrementLightRadius(){
         m_lightRadius-=0.1;
     }
+    void ChangeMesh(Mesh mesh, GLuint program);
+    void SelectNextControlPoint(){
+        m_control[index%16].Color = vec4(0.0,1.0,0.0,1.0);
+        index++;
+        m_control[index%16].Color = vec4(0.0,0.0,1.0,1.0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+        glBufferData(GL_ARRAY_BUFFER, m_control.size()*sizeof(Vertex3D), m_control.data(), GL_STATIC_DRAW);
+    }
+    int GetSelectedControlPoint(){
+        return index;
+    }
 
+    void UpdatePoints(BezierPointReader rdr);
 private:
+    unsigned int index = 0;
     GLint m_mat;
     bool m_para;
     bool m_stop;
@@ -107,6 +122,9 @@ private:
     GLint m_fMatLocation;
     GLint m_vlightPosLocation;
     GLint m_flightPosLocation;
+    GLint m_lineMVPLocation;
+    GLint m_lineBoolLocation;
+    GLint m_linePLocation;
     vec4 m_eye;
     float m_radius;
     float m_height;
@@ -114,6 +132,14 @@ private:
     float m_lightRadius;
     float m_lightHeight;
     float m_lightAngle;
+    GLuint m_program;
+    std::vector<Vertex3D> m_control;
+
+
+    std::vector<Vertex3D> MakeAxes();
+
+    void SetControlPoints(std::vector<Vertex3D> points);
+
 };
 
 
