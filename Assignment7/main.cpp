@@ -213,8 +213,6 @@ int main( int argc, char **argv ) {
     glutAddMenuEntry("Shiney Red", Menu::ShineyRed);
     glutAddMenuEntry("Dull Green", Menu::DullGreen);
     glutAddMenuEntry("MatteBlue", Menu::MatteBlue);
-    glutAddMenuEntry("Gouraud", Menu::Gouraud);
-    glutAddMenuEntry("Phong", Menu::Phong);
     glutAddMenuEntry("Start Camera Rotation", Menu::Start);
     glutAddMenuEntry("Stop Camera Rotation", Menu::Stop);
     glutAddMenuEntry("Perspective", Menu::Perspective);

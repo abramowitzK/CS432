@@ -16,10 +16,16 @@ GLuint depth;
 enum Menu {
 };
 void init( void ) {
+    std::cout << "This displays 3 triangle meshes, (5k bunny, 60k bunny, 50k dragon)" << std::endl;
+    std::cout << "The light source is attached to the camera" << std::endl;
+    std::cout << "Clicking on an object will change it's color to black. Only one object can be selected at a time" << std::endl;
+    std::cout << "Press a to rotate the camera around the object" << std::endl;
+    std::cout << "Press r to increase the radius of rotation. R (shift r) to decrease" << std::endl;
+    std::cout << "Minimum radius is 15 and you will not be able to decrease beyond that" << std::endl;
     SMFMeshLoader loader = SMFMeshLoader();
     loader.LoadFile("dragon-50000.smf");
     loader.LoadFile("bunny.smf");
-    loader.LoadFile("teapot.smf");
+    loader.LoadFile("bound-bunny_5k.smf");
     // Create vertex array object
     glGenVertexArrays( 1, vao );
     glBindVertexArray( vao[0] );
@@ -34,9 +40,9 @@ void init( void ) {
     object[1]->Scale(15.0,15.0,15.0);
     object[1]->Translate(0.0,-2.0,0.0);
     object[1]->SetColor(1);
-    object[2] = new Object(loader.GetMesh("teapot.smf"));
-    object[2]->Scale(-0.25,-0.25,-0.25);
-    object[2]->Translate(-5.0f, -1.0f, 0.0f);
+    object[2] = new Object(loader.GetMesh("bound-bunny_5k.smf"));
+    object[2]->Scale(1.5,1.5,1.5);
+    object[2]->Translate(-5.0f, 0.0f, 0.0f);
     object[2]->SetColor(2);
     for(auto obj : object){
         obj->Init(program[0]);
@@ -112,7 +118,8 @@ void keyboard( unsigned char key, int x, int y ) {
     switch ( key ) {
         //Cleanup any resources we allocated since we're exiting the application
         case 033:
-            delete object;
+            for(auto obj : object)
+                delete obj;
             exit(EXIT_SUCCESS);
             break;
         case 'r':
@@ -133,6 +140,9 @@ void keyboard( unsigned char key, int x, int y ) {
     }
     update();
 }
+void resize(int,int){
+    glutReshapeWindow(width,height);
+}
 //main function
 int main( int argc, char **argv ) {
     //Set glut state
@@ -148,9 +158,8 @@ int main( int argc, char **argv ) {
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
     glutIdleFunc(update);
-    glutCreateMenu(mainMenu);
-    glutAttachMenu(GLUT_RIGHT_BUTTON);
     glutMouseFunc(mouse);
+    glutReshapeFunc(resize);
     init();
 
     glutMainLoop();
