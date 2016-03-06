@@ -2,20 +2,20 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/Mesh.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/Mesh.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/Object.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/Common/InitShader.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/SMFMeshLoader.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/Vertex.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/BezierPointReader.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/SMFMeshLoader.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/Object.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/main.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/StringUtils.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/StringUtil.h.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Assignment8/BezierPointReader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/Common/InitShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/Mesh.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/Object.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/SMFMeshLoader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/Vertex.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/BezierPointReader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/SMFMeshLoader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/Mesh.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/Object.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/main.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/StringUtils.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/StringUtil.h.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Assignment9P1/BezierPointReader.cpp" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
@@ -25,14 +25,14 @@
           <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include" />
           <root url="file:///usr/include" />
           <root url="file:///usr/local/include" />
-          <root url="file://$MODULE_DIR$/Assignment8/include" />
+          <root url="file://$MODULE_DIR$/Assignment9P1/include" />
         </CLASSES>
         <SOURCES>
           <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed" />
           <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include" />
           <root url="file:///usr/include" />
           <root url="file:///usr/local/include" />
-          <root url="file://$MODULE_DIR$/Assignment8/include" />
+          <root url="file://$MODULE_DIR$/Assignment9P1/include" />
         </SOURCES>
       </library>
     </orderEntry>
