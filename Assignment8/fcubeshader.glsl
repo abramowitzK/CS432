@@ -11,9 +11,9 @@ struct Materialf{
     vec4 specularColor;
     float shinyness;
 };
-Materialf fm1 = Materialf(vec4(0.2,0.0,0.0,1.0), vec4(1.0,0.0,0.0,1.0), vec4(1.0,0.8,0.8,1.0), 10.0);
-Materialf fm2 = Materialf(vec4(0.0,0.2,0.0,1.0), vec4(0.0,1.0,0.0,1.0), vec4(0.8,1.0,0.8,1.0), 10.0);
-Materialf fm3 = Materialf(vec4(0.0,0.0,0.1,1.0), vec4(0.0,0.0,1.0,1.0), vec4(0.8,0.8,1.0,1.0), 10.0);
+Materialf fm1 = Materialf(vec4(0.4,0.0,0.0,1.0), vec4(1.0,0.0,0.0,1.0), vec4(1.0,0.8,0.8,1.0), 10.0);
+Materialf fm2 = Materialf(vec4(0.0,0.4,0.0,1.0), vec4(0.0,1.0,0.0,1.0), vec4(0.8,1.0,0.8,1.0), 10.0);
+Materialf fm3 = Materialf(vec4(0.0,0.0,0.4,1.0), vec4(0.0,0.0,1.0,1.0), vec4(0.8,0.8,1.0,1.0), 10.0);
 Materialf fm4 = Materialf(vec4(0.0,0.0,0.0,1.0), vec4(0.0,0.0,0.0,1.0), vec4(1.0,1.0,1.0,1.0), 10.0);
 void main()
 {
@@ -33,7 +33,7 @@ void main()
     vec3 positionToLightSource = vec3(LightPos1 - transformed.xyz);
     float distance = length(positionToLightSource);
     vec3 lightDirection = normalize(positionToLightSource);
-    float attenuation = (50.0 / (1.0 + (pow(distance,2))));
+    float attenuation = (100.0 / (1.0 + (pow(distance,2))));
     float diffuse = attenuation * max(0.0, dot(normalDirection, lightDirection));
     diffuse = min(diffuse,1.0);
     vec4 specularReflection;

@@ -43,7 +43,8 @@ public:
         m_radius += 0.3;
     }
     inline void DecreaseRadius(){
-        m_radius -= 0.3;
+        if(m_radius > 15.0)
+            m_radius -= 0.3;
     }
     inline void IncreaseAngle(){
         m_angle += 0.05;

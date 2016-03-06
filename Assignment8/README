@@ -1,10 +1,6 @@
 r - increment radius
 R - decrement radius
-s - increment speed
-S - decrement speed
-h - increment height
-H - decrement height
-Right click menu to change projection and to start/stop animation.
+a - increment angle
 
 See instructions that print when program starts.
 
