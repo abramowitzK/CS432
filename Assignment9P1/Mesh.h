@@ -11,6 +11,7 @@
 class Mesh {
 public:
     Mesh(std::vector<vec4> points, std::vector<unsigned> indicies, std::vector<vec4> colors, std::vector<vec3> normals);
+    Mesh(std::vector<vec4> points, std::vector<unsigned> indicies, std::vector<vec4> colors, std::vector<vec3> normals, std::vector<vec2> uv);
     Mesh();
     ~Mesh();
     void Init(GLint program);
@@ -23,6 +24,7 @@ private:
     std::vector<vec4> m_colors;
     std::vector<Vertex3D> m_vertices;
     std::vector<vec3> m_normals;
+    std::vector<vec2> m_uv;
     GLuint m_vbo;
     GLuint m_ibo;
 };

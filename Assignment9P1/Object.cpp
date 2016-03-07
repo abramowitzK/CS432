@@ -16,7 +16,7 @@ Object::Object(Mesh mesh) {
     m_stop = false;
     m_radius = 25;
     m_para = false;
-    m_speed = 1.0;
+    m_speed = 0.1;
     m_height = 10.0;
     m_eye = vec4(-15.0, 15.0, 10.0, 1.0);
     m_gouraud = true;

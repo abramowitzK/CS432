@@ -1,12 +1,14 @@
 attribute vec4 vPosition;
 attribute vec4 vColor;
 attribute vec3 vNormal;
+attribute vec2 vUv;
 
 varying vec4 outColor;
 varying mat4 model;
 varying mat4 view;
 varying vec4 fVertex;
 varying vec3 fNormal;
+varying vec2 uv;
 
 
 //Just the m matrix. We can't use the view matrix with lighting calcs because it will change
@@ -73,6 +75,6 @@ void main()
         fNormal = (vec4(vNormal,0.0)).xyz;
         outColor = mat.diffuseColor;
     }
-
+    uv = vUv;
     gl_Position =  pMatrix * vMatrix * mMatrix * vPosition ;
 }

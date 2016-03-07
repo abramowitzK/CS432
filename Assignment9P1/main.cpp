@@ -25,7 +25,78 @@ enum Menu {
     Perspective = 7,
     Orthographic = 8
 };
+const unsigned IMAGE_SIZE = 1024;
+float noisearray[IMAGE_SIZE][IMAGE_SIZE];
+vec4 image[IMAGE_SIZE][IMAGE_SIZE];
+//Generate pseudorandom noise -- inspired by http://lodev.org/cgtutor/randomnoise.html#Marble
+void noise()
+{
+    //Seed the random number generator
+    srand(time(NULL));
+    for (int x = 0; x < IMAGE_SIZE; x++) {
+        for (int y = 0; y < IMAGE_SIZE; y++) {
+            noisearray[x][y] = (GLfloat) ((rand() % RAND_MAX) / (float)RAND_MAX);
+        }
+    }
+}
+//taken from http://lodev.org/cgtutor/randomnoise.html#Marble
+float smooth(float x, float y)
+{
+    //get fractional part of x and y
+    float fractX = x - int(x);
+    float fractY = y - int(y);
+    //wrap around
+    int x1 = (int(x) + IMAGE_SIZE) % IMAGE_SIZE;
+    int y1 = (int(y) + IMAGE_SIZE) % IMAGE_SIZE;
+    //neighbor values
+    int x2 = (x1 + IMAGE_SIZE - 1) % IMAGE_SIZE;
+    int y2 = (y1 + IMAGE_SIZE - 1) % IMAGE_SIZE;
+    //smooth the noise with bilinear interpolation
+    float value = 0.0;
+    value += fractX * fractY * noisearray[y1][x1];
+    value += (1 - fractX) * fractY * noisearray[y1][x2];
+    value += fractX * (1 - fractY) * noisearray[y2][x1];
+    value += (1 - fractX) * (1 - fractY) * noisearray[y2][x2];
+
+    return value;
+}
+//inspired by http://lodev.org/cgtutor/randomnoise.html#Marble
+float generateSwirls(float x, float y, float size) {
+    float ret = 0.0;
+    float init = size;
+    while(size >= 1.0) {
+        float newX = x/size;
+        float newY = y/size;
+        ret += smooth(newX, newY) * size;
+        size = (float) (size / 3.5);
+    }
+    ret = (float) (256.0 * ret / init);
+    return(GLfloat)(256.0 * ret / init);
+}
+//Procedurally generate a marble texture
+void marble(){
+    vec4 color;
+    for(int x = 0; x < IMAGE_SIZE; x++) {
+        for (int y = 0; y < IMAGE_SIZE; y++) {
+            float value = (float) (5.0 * generateSwirls(y, x, 256.0) / 256.0);
+            float sineValue = (float) (256.0 * fabs(sinf((float) (value * M_PI))));
+            color.x = (GLfloat) ((20.0 + sineValue) / 256.0);
+            color.y = (GLfloat) ((100.0 + sineValue) / 256.0);
+            color.z = (GLfloat) ((50.0 + sineValue) / 256.0);
+            color.w = 1.0;
+            image[x][y] = color;
+        }
+    }
+};
+GLuint tex;
 void init( void ) {
+    noise();
+    marble();
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, IMAGE_SIZE, IMAGE_SIZE, 0, GL_RGBA, GL_FLOAT, image);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glPointSize(10);
     std::cout << "This program displays a 3D bunny. Camera rotates around bunny." << std::endl;

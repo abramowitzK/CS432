@@ -28,10 +28,10 @@ public:
     mat4 GetTransform();
     void Reset();
     inline void IncrementSpeed(){
-        m_speed+=1;
+        m_speed+=0.05;
     }
     inline void DecrementSpeed(){
-        m_speed-=1;
+        m_speed-=0.05;
     }
     inline void IncreaseHeight(){
         m_height += 0.1;

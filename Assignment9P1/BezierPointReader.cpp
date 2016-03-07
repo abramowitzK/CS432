@@ -47,21 +47,24 @@ Mesh BezierPointReader::TesselateBezierPatch(int sampling) {
     float deltaJ = deltaI;
 
     vec4 samples[sampling][sampling];
+    vec2 UV[sampling][sampling];
     //Get all the points that we need
     for(int i = 0; i < sampling; i++){
         for(int j = 0; j < sampling; j++){
             samples[i][j] = GetPointOnBezierSurface(deltaI*i, deltaJ*j);
+            UV[i][j] = vec2(deltaI*i, deltaJ*j);
         }
 
     }
     std::vector<vec4> vertices = std::vector<vec4>();
     std::vector<vec4> colors=std::vector<vec4>();
     std::vector<unsigned> indices=std::vector<unsigned>();
-
+    std::vector<vec2> uv = std::vector<vec2>();
     for(int i = 0; i < sampling; i++){
         for(int j = 0; j < sampling; j++){
             //Push vertices back one row at a time
             vertices.push_back(samples[i][j]);
+            uv.push_back(UV[i][j]);
                 colors.push_back(vec4(0.5));
         }
     }
@@ -100,7 +103,7 @@ Mesh BezierPointReader::TesselateBezierPatch(int sampling) {
         normals[i] = Angel::normalize(normals[i]);
     }
     //CalcVertexNormals(indices,faceNormals,normals);
-    return Mesh(vertices, indices,colors,normals);
+    return Mesh(vertices, indices,colors,normals, uv);
 
 
 }

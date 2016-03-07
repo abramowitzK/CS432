@@ -39,6 +39,9 @@ void Mesh::Init(GLint program) {
     GLint vNormal = glGetAttribLocation(program, "vNormal");
     glEnableVertexAttribArray(vNormal);
     glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(sizeof(vec4)*2));
+    GLint vUV = glGetAttribLocation(program, "vUv");
+    glEnableVertexAttribArray(vUV);
+    glVertexAttribPointer(vUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(sizeof(vec4)*2 + sizeof(vec3)));
 
 }
 
@@ -56,6 +59,9 @@ void Mesh::Draw(GLint program) {
     GLint vNormal = glGetAttribLocation(program, "vNormal");
     glEnableVertexAttribArray(vNormal);
     glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(sizeof(vec4)*2));
+    GLint vUV = glGetAttribLocation(program, "vUv");
+    glEnableVertexAttribArray(vUV);
+    glVertexAttribPointer(vUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), BUFFER_OFFSET(sizeof(vec4)*2 + sizeof(vec3)));
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 }
 
@@ -65,6 +71,18 @@ void Mesh::GenerateVertices(){
         vert.Position = m_points[i];
         vert.Color = m_colors[i];
         vert.normal = m_normals[i];
+        vert.UV = m_uv[i];
         m_vertices.push_back(vert);
     }
+}
+
+Mesh::Mesh(std::vector<vec4> points, std::vector<unsigned> indicies, std::vector<vec4> colors,
+           std::vector<vec3> normals, std::vector<vec2> uv) {
+        m_points = points;
+        m_colors = colors;
+        m_indices = indicies;
+        std::cout << indicies.size() << " Triangles in image" << std::endl;
+        m_normals = normals;
+        m_vertices = std::vector<Vertex3D>();
+        m_uv = uv;
 }

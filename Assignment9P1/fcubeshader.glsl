@@ -2,10 +2,12 @@ varying vec4 outColor;
 varying mat4 model;
 varying vec4 fVertex;
 varying vec3 fNormal;
+varying vec2 uv;
 uniform int fMaterial;
 uniform bool usePhong;
 uniform mat4 fView;
 uniform vec3 flight2pos;
+uniform sampler2D texSampler;
 vec3 LightPos1 = vec3(0.0, 0.0, 0.0);
 //vec3 LightPos2 = flight2pos;
 struct Materialf{
@@ -67,7 +69,7 @@ void main()
             pow(max(0.0, dot(reflectDir, normalize(-viewDirection2))), mat.shinyness);
             specularReflection2 = min(specularReflection2,1.0);
         }*/
-        gl_FragColor = mat.diffuseColor*diffuse + mat.ambientColor + specularReflection;
+        gl_FragColor = diffuse* texture2D(texSampler, uv).rgba + mat.ambientColor + specularReflection;
     }
     else
         gl_FragColor = outColor;
