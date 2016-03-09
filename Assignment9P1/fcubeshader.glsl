@@ -69,7 +69,7 @@ void main()
             pow(max(0.0, dot(reflectDir, normalize(-viewDirection2))), mat.shinyness);
             specularReflection2 = min(specularReflection2,1.0);
         }*/
-        gl_FragColor = diffuse* texture2D(texSampler, uv).rgba + mat.ambientColor + specularReflection;
+        gl_FragColor = diffuse * texture2D(texSampler, uv).rgba + mat.ambientColor + specularReflection;
     }
     else
         gl_FragColor = outColor;

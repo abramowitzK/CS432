@@ -14,9 +14,9 @@ struct Materialf{
     vec4 specularColor;
     float shinyness;
 };
-Materialf fm1 = Materialf(vec4(0.1,0.0,0.0,1.0), vec4(1.0,0.0,0.0,1.0), vec4(1.0,0.8,0.8,1.0), 10.0);
+Materialf fm1 = Materialf(vec4(0.1,0.0,0.0,1.0), vec4(1.0,0.0,0.0,1.0), vec4(1.0,1.0,1.0,1.0), 10.0);
 Materialf fm2 = Materialf(vec4(0.0,0.1,0.0,1.0), vec4(0.0,1.0,0.0,1.0), vec4(0.0,0.0,0.0,1.0), 1.0);
-Materialf fm3 = Materialf(vec4(0.0,0.0,0.3, 1.0), vec4(0.0,0.0,1.0,1.0), vec4(0.5,0.5,1.0,1.0), 2.0);
+Materialf fm3 = Materialf(vec4(0.0,0.0,0.3, 1.0), vec4(0.0,0.0,1.0,1.0), vec4(1.0,1.0,1.0,1.0), 2.0);
 vec4 tigerStripes(float x, float y, float z){
 float radius = sqrt(pow(x,2)+pow(z,2));
 float angle;
@@ -91,7 +91,7 @@ void main()
             pow(max(0.0, dot(reflectDir, normalize(-viewDirection2))), mat.shinyness);
             specularReflection2 = min(specularReflection2,1.0);
         }
-        vec4 color = wood(transformed2.x, transformed2.y, transformed2.z);
+        vec4 color = tigerStripes(transformed2.x, transformed2.y, transformed2.z);
         gl_FragColor = color*diffuse + specularReflection + color*diffuse2 + specularReflection2;
     }
     else

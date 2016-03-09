@@ -99,7 +99,7 @@ void init( void ) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glPointSize(10);
-    std::cout << "This program displays a 3D bunny. Camera rotates around bunny." << std::endl;
+    std::cout << "Textured marble bezier patch" << std::endl;
     std::cout << "Press r to increase the radius of rotation. R (shift r) to decrease" << std::endl;
     std::cout << "Press s to increase the speed of rotation. S (shift S) to decrease" << std::endl;
     std::cout << "Press h to increase the height. H (shift h) to decrease" << std::endl;
