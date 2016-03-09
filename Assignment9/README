@@ -1,0 +1,4 @@
+make build will compile
+make run1 will run Part1
+make run2 will run Part2
+make clean will clean executables
